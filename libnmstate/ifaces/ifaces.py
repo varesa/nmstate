@@ -327,6 +327,7 @@ class Ifaces:
             if (
                 iface.type in [InterfaceType.VLAN, InterfaceType.VXLAN]
                 and iface.is_up
+                and iface.parent
             ):
                 if (
                     self._kernel_ifaces[iface.parent].type
@@ -351,6 +352,7 @@ class Ifaces:
                 iface.type in [InterfaceType.VLAN, InterfaceType.VXLAN]
                 and iface.is_up
                 and iface.mtu
+                and iface.parent
             ):
                 base_iface = self._kernel_ifaces.get(iface.parent)
                 if not base_iface.mtu:
