@@ -1,0 +1,2 @@
+- if `learning` is unset, it will come back as `learning: true` and cause a diff
+- if `base-if` is unset, it will come back as an emptry string
