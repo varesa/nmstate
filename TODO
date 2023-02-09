@@ -15,20 +15,3 @@
     remote: 127.0.0.254
     destination-port: 1234
 
-- if `base-if` is unset, it will come back as an emptry string
-
-  vxlan:
-    id: 1002
-    learning: false
-    local: 172.0.0.1
-    destination-port: 1234
-
-->
-
-  vxlan:
-    base-iface: ''
-    id: 1002
-    learning: false
-    local: 172.0.0.1
-    destination-port: 1234
-
