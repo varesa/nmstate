@@ -9,6 +9,9 @@ impl From<&VxlanConfig> for NmSettingVxlan {
         let mut setting = NmSettingVxlan::default();
         setting.id = Some(config.id);
         setting.parent = Some(config.base_iface.clone());
+        if let Some(v) = config.local.as_ref() {
+            setting.local = Some(v.to_string());
+        }
         if let Some(v) = config.remote.as_ref() {
             setting.remote = Some(v.to_string());
         }

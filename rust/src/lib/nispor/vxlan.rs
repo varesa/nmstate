@@ -8,7 +8,9 @@ pub(crate) fn np_vxlan_to_nmstate(
 ) -> VxlanInterface {
     let vxlan_conf = np_iface.vxlan.as_ref().map(|np_vxlan_info| VxlanConfig {
         id: np_vxlan_info.vxlan_id,
-        base_iface: np_vxlan_info.base_iface.clone(),
+        base_iface: Some(np_vxlan_info.base_iface.clone()),
+        learning: Some(np_vxlan_info.learning),
+        local: std::net::IpAddr::from_str(np_vxlan_info.local.as_str()).ok(),
         remote: std::net::IpAddr::from_str(np_vxlan_info.remote.as_str()).ok(),
         dst_port: Some(np_vxlan_info.dst_port),
     });
