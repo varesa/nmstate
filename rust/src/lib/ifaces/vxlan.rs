@@ -50,7 +50,7 @@ impl VxlanInterface {
     pub(crate) fn parent(&self) -> Option<&str> {
         self.vxlan
             .as_ref()
-            .map(|cfg| cfg.base_iface)
+            .map(|cfg| cfg.base_iface.as_ref())
             .flatten()
             .map(|base_iface| base_iface.as_str())
     }
