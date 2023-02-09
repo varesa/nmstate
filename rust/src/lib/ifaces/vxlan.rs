@@ -48,7 +48,11 @@ impl VxlanInterface {
     }
 
     pub(crate) fn parent(&self) -> Option<&str> {
-        self.vxlan.as_ref().map(|cfg| cfg.base_iface.as_str())
+        self.vxlan
+            .as_ref()
+            .map(|cfg| cfg.base_iface)
+            .flatten()
+            .map(|base_iface| base_iface.as_str())
     }
 }
 
@@ -56,9 +60,14 @@ impl VxlanInterface {
 #[serde(rename_all = "kebab-case", deny_unknown_fields)]
 #[non_exhaustive]
 pub struct VxlanConfig {
-    pub base_iface: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_iface: Option<String>,
     #[serde(deserialize_with = "crate::deserializer::u32_or_string")]
     pub id: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub learning: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local: Option<std::net::IpAddr>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote: Option<std::net::IpAddr>,
     #[serde(
