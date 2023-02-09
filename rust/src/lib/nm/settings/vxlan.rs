@@ -8,7 +8,12 @@ impl From<&VxlanConfig> for NmSettingVxlan {
     fn from(config: &VxlanConfig) -> Self {
         let mut setting = NmSettingVxlan::default();
         setting.id = Some(config.id);
-        setting.parent = config.base_iface.clone();
+        if let Some(v) = config.base_iface.as_ref() {
+            setting.parent = Some(v.to_string());
+        }
+        if let Some(v) = config.learning {
+            setting.learning = Some(v);
+        }
         if let Some(v) = config.local.as_ref() {
             setting.local = Some(v.to_string());
         }
