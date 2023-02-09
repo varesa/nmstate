@@ -31,6 +31,8 @@ class VxlanState:
         self.name = f"{base_if}.{id}"
         self.id = id
         self.base_if = base_if
+        self.learning = learning
+        self.local = local
         self.remote = remote
         self.destination_port = destination_port
 
@@ -43,6 +45,8 @@ class VxlanState:
             VXLAN.CONFIG_SUBTREE: {
                 VXLAN.ID: self.id,
                 VXLAN.BASE_IFACE: self.base_if,
+                VXLAN.LEARNING: self.learning,
+                VXLAN.LOCAL: self.local,
                 VXLAN.REMOTE: self.remote,
                 VXLAN.DESTINATION_PORT: self.destination_port,
             },
