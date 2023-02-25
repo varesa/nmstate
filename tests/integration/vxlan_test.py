@@ -72,6 +72,17 @@ def test_add_and_remove_two_vxlans_on_same_iface(eth1_up):
 
 
 @pytest.mark.tier1
+def test_add_and_remove_vxlan_without_base_if():
+    with vxlan_interfaces(
+        VxlanState(id=VXLAN1_ID, remote="192.168.100.1"),
+    ) as desired_state:
+        assertlib.assert_state(desired_state)
+
+    vxlan1_ifname = desired_state[Interface.KEY][0][Interface.NAME]
+    assertlib.assert_absent(vxlan1_ifname)
+
+
+@pytest.mark.tier1
 @pytest.mark.xfail(
     is_k8s(),
     reason=(
@@ -145,6 +156,17 @@ def test_show_vxlan_with_no_remote(eth1_up):
 
 
 @pytest.mark.tier1
+def test_add_and_remove_vxlan_with_no_remote():
+    with vxlan_interfaces(
+        VxlanState(id=VXLAN1_ID, local="192.168.100.1"),
+    ) as desired_state:
+        assertlib.assert_state(desired_state)
+
+    vxlan1_ifname = desired_state[Interface.KEY][0][Interface.NAME]
+    assertlib.assert_absent(vxlan1_ifname)
+
+
+@pytest.mark.tier1
 def test_add_vxlan_and_modify_vxlan_id(eth1_up):
     ifname = eth1_up[Interface.KEY][0][Interface.NAME]
     with vxlan_interfaces(
@@ -174,6 +196,24 @@ def test_vxlan_enable_and_disable_accept_all_mac_addresses(eth1_up):
         assertlib.assert_state(d_state)
 
         d_state[Interface.KEY][0][Interface.ACCEPT_ALL_MAC_ADDRESSES] = False
+        libnmstate.apply(d_state)
+        assertlib.assert_state(d_state)
+
+    vxlan1_ifname = d_state[Interface.KEY][0][Interface.NAME]
+    assertlib.assert_absent(vxlan1_ifname)
+
+
+@pytest.mark.tier1
+def test_vxlan_enable_and_disable_learning(eth1_up):
+    ifname = eth1_up[Interface.KEY][0][Interface.NAME]
+    with vxlan_interfaces(
+        VxlanState(id=VXLAN1_ID, base_if=ifname, remote="192.168.100.1")
+    ) as d_state:
+        d_state[Interface.KEY][0][VXLAN.CONFIG_SUBTREE][VXLAN.LEARNING] = True
+        libnmstate.apply(d_state)
+        assertlib.assert_state(d_state)
+
+        d_state[Interface.KEY][0][VXLAN.CONFIG_SUBTREE][VXLAN.LEARNING] = False
         libnmstate.apply(d_state)
         assertlib.assert_state(d_state)
 

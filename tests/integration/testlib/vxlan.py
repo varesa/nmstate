@@ -27,7 +27,15 @@ from libnmstate.schema import VXLAN
 
 
 class VxlanState:
-    def __init__(self, id, base_if, remote, destination_port=4789):
+    def __init__(
+        self,
+        id,
+        base_if=None,
+        local=None,
+        remote=None,
+        learning=True,
+        destination_port=4789,
+    ):
         self.name = f"{base_if}.{id}"
         self.id = id
         self.base_if = base_if
